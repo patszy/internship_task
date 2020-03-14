@@ -114,7 +114,6 @@ class Incomes{
         for(let i=0; i<(values.length-1); i++){
             this.sum += parseFloat(values[i].value);
         }
-        console.log(this.sum);
     }
 }
 
@@ -131,36 +130,30 @@ window.onload = () => {
     const companiesTab = [];
     const incomesTab = [];
 
-    // getIncomesData(39).then(incomData => {
+    // getIncomesData(82).then(incomData => {
     //     let incomes = new Incomes(incomData.id, incomData.incomes);
     //     incomes.sumIncomes(incomes);
-
     //     incomesTab.push(incomes);
-    //     console.log(incomesTab[0].sum);
     // });
 
-    getIncomesData(82).then(incomData => {
-        let incomes = new Incomes(incomData.id, incomData.incomes);
-        incomes.sumIncomes(incomes);
-        incomesTab.push(incomes);
-    });
-
     getCompaniesData().then(compData => {
-        compData.map((item, index) => {
-
-            let company = new Company(item.id, item.name, item.city, incomesTab[0].sum);
+        compData.map(item => {
+            let company = new Company(item.id, item.name, item.city, 0);
             companiesTab.push(company);
         });
+    });
 
+    getCompaniesData().then( () => {
         document.getElementsByClassName('loader')[0].style.display = 'none';
         document.getElementsByClassName('table')[0].style.display = 'flex';
 
+        console.log(incomesTab);
         // drawTableHead(companiesTab);
         drawTableBody(companiesTab);
+    });
 
-        document.querySelector('input').addEventListener('keyup', (event) => {
-            document.querySelector('tbody').innerHTML = '';
-            drawTableBody( searchCompany(companiesTab, event) );
-        });
+    document.querySelector('input').addEventListener('keyup', (event) => {
+        document.querySelector('tbody').innerHTML = '';
+        drawTableBody( searchCompany(companiesTab, event) );
     });
 };
