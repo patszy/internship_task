@@ -1,0 +1,73 @@
+@media only screen and (max-width: 1200px){
+    .table {
+        width: 100%;
+        padding-top: 0;
+    }
+}
+
+@media only screen and (max-width: 760px){
+    h1 {
+        width: 100%;
+    }
+
+    input {
+        width: 50%;
+        margin: 20px auto 0;
+        text-align: center;
+    }
+
+    th {
+        display: none;
+    }
+
+	table, thead, tbody, td, tr {
+		display: block;
+	}
+
+	thead tr {
+		position: absolute;
+		top: -1px;
+		left: -1px;
+    }
+
+    tr {
+        box-shadow: 0 0 20px var(--main-color);
+        margin-bottom: 30px;
+    }
+
+    td:first-child {
+        width: 100%;
+    }
+
+	td {
+        position: relative;
+        padding: 10px 0 10px 50%;
+        width: 100%;
+        text-align: center;
+	}
+
+	td:before {
+		position: absolute;
+		top: 0px;
+        left: 0px;
+        width: 50%;
+        padding: 10px 0;
+        background-color: var(--main-color);
+        border-bottom: 1px solid #3498db;
+    }
+
+    td:first-child::before,
+    td:last-child::before {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    tbody tr:hover,
+    tbody tr td:hover {
+        background-color: transparent;
+    }
+
+	td:nth-of-type(1):before { content: "Id"; }
+	td:nth-of-type(2):before { content: "Name"; }
+	td:nth-of-type(3):before { content: "City"; }
+	td:nth-of-type(4):before { content: "Total Income"; }
+}
