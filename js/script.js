@@ -23,25 +23,6 @@ const getIncomesData = async (id) => {
     }
 };
 
-// const drawTableHead = tab => {
-//     let tHead = document.querySelector('thead');
-//     let tr = document.createElement('tr'), th;
-//     let keysTab = Object.keys(tab[0]);
-//     let gradesTab = Object.keys(tab[0].grades);
-
-//     th = document.createElement('th');
-//     th.innerText = `${keysTab[0]}`.toUpperCase();
-//     tr.appendChild(th);
-
-//     gradesTab.map(item => {
-//         th = document.createElement('th');
-//         th.innerText = `${item}`.toUpperCase();
-//         tr.appendChild(th);
-//     });
-
-//     tHead.appendChild(tr);
-// }
-
 const drawTableBody = tab => {
     let tBody = document.querySelector('tbody');
     let tr, td;
@@ -57,27 +38,6 @@ const drawTableBody = tab => {
             td.innerText = `${company[key]}`;
             tr.appendChild(td);
         });
-
-        // for(let i=0; i<keys.length-1; i++){
-        //     td = document.createElement('td');
-
-        //     td.innerText = `${company[keys[i]]}`;
-        //     tr.appendChild(td);
-        // }
-
-        // let {id, grades} = item;
-
-        // td.innerText = `${id}`;
-        // tr.appendChild(td);
-
-        // for (let key in grades) {
-        //     td = document.createElement('td');
-        //     td.innerText = `${grades[key]}`;
-        //     tr.appendChild(td);
-        // }
-
-        // (grades['avg'] < 2) ? tr.classList.add('wrong') : false;
-        // (grades['avg'] > 4.75) ? tr.classList.add('good') : false;
 
         tBody.appendChild(tr);
     });
@@ -104,7 +64,7 @@ class Incomes{
     constructor(id, incomes){
         this.id = id;
         this.incomes = incomes;
-        this.sum = 0;
+        this.sum;
     }
 
     sumIncomes({incomes}){
@@ -130,25 +90,31 @@ window.onload = () => {
     const companiesTab = [];
     const incomesTab = [];
 
-    // getIncomesData(82).then(incomData => {
-    //     let incomes = new Incomes(incomData.id, incomData.incomes);
-    //     incomes.sumIncomes(incomes);
-    //     incomesTab.push(incomes);
-    // });
-
-    getCompaniesData().then(compData => {
+    getCompaniesData()
+    .then(compData => {
         compData.map(item => {
             let company = new Company(item.id, item.name, item.city, 0);
             companiesTab.push(company);
         });
-    });
 
-    getCompaniesData().then( () => {
+        companiesTab.map( company => {
+            getIncomesData(company.id).then(incomData => {
+                let incomes = new Incomes(incomData.id, incomData.incomes);
+                incomes.sumIncomes(incomes);
+                incomesTab.push(incomes);
+
+                company.tIncomes = (Math.round(incomes.sum * 100) / 100).toFixed(2);
+            });
+        });
+    })
+
+    .then( () => {
+        console.log(companiesTab);
+        console.log(incomesTab);
+
         document.getElementsByClassName('loader')[0].style.display = 'none';
         document.getElementsByClassName('table')[0].style.display = 'flex';
 
-        console.log(incomesTab);
-        // drawTableHead(companiesTab);
         drawTableBody(companiesTab);
     });
 

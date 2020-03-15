@@ -1,6 +1,9 @@
 :root {
     --main-color: rgba(0, 0, 0, 0.2);
     --main-text-color: #ccc;
+    --main-bg-color: #222;
+    --special-border-color: #3498db;
+    --special-bg-color: rgba(32, 64, 32, 1);
 }
 
 * {
@@ -14,7 +17,7 @@ body {
 
 body {
     margin: 0;
-    background: linear-gradient(45deg, #49a09d, #5f2c82);
+    background: var(--main-bg-color);
     background-attachment: fixed;
     color: var(--main-text-color);
     text-align: center;
@@ -38,7 +41,7 @@ input {
     background-color: transparent;
     color: var(--main-text-color);
     align-self: flex-end;
-    border-bottom: 1px solid #3498db;
+    border-bottom: 1px solid var(--special-border-color);
 }
 
 input::placeholder {
@@ -69,26 +72,13 @@ th, td {
 }
 
 th {
-    border-bottom: 1px solid #3498db;
-    background-color: var(--main-color);
-}
-
-th:first-child,
-th:last-child {
-    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--special-border-color);
+    background-color: var(--special-bg-color);
 }
 
 tbody tr:hover,
 tbody tr td:hover {
     background-color: var(--main-color);
-}
-
-.wrong > td {
-    border-bottom: 1px solid #e84118;
-}
-
-.good > td {
-    border-bottom: 1px solid #4cd137;
 }
 
 .loader {
