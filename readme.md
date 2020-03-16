@@ -13,6 +13,7 @@ Table is in pre-alpha version.
 The table shows id, name, city and incomes of company. <br/>
 Companies can be sorted by incomes descending. <br/>
 Copmanies can be filtered by name. <br/>
+Table is paginated. <br/>
 Table is responsive.
 
 ## Technologies

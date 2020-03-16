@@ -120,6 +120,7 @@ class Company{
 window.onload = () => {
     const companiesTab = [];
     const incomesTab = [];
+    let currentTab = [];
 
     let page = 0;
 
@@ -142,39 +143,35 @@ window.onload = () => {
         })
 
         .then( () => {
-            console.log(companiesTab);
-            console.log(incomesTab);
-
             document.getElementsByClassName('loader')[0].style.display = 'none';
             document.getElementsByClassName('table__container')[0].style.display = 'flex';
 
-            drawTableBody(companiesTab, page);
+            currentTab = companiesTab;
+            drawTableBody(currentTab, page);
         });
 
     document.querySelector('input').addEventListener('keyup', event => {
         document.querySelector('tbody').innerHTML = '';
 
-        drawTableBody( searchCompany(companiesTab, event));
-        console.log(companiesTab);
-
-        console.log(incomesTab);
+        currentTab = searchCompany(companiesTab, event);
+        drawTableBody( currentTab );
     });
 
     document.querySelector('button').addEventListener('click', () => {
-        drawTableBody(companiesTab, 0);
+        drawTableBody(currentTab, 0);
     });
 
     document.querySelectorAll('.pagination li')[0].addEventListener('click', () => {
         if(page != 0) page--;
 
         document.querySelectorAll('.pagination li')[1].innerText = page+1;
-        drawTableBody(companiesTab, page);
+        drawTableBody(currentTab, page);
     });
 
     document.querySelectorAll('.pagination li')[2].addEventListener('click', () => {
-        if(page != Math.floor(companiesTab.length / 10) -1 ) page++;
+        if(page != Math.floor(currentTab.length / 10) -1 ) page++;
 
         document.querySelectorAll('.pagination li')[1].innerText = page+1;
-        drawTableBody(companiesTab, page);
+        drawTableBody(currentTab, page);
     });
 };
