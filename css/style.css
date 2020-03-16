@@ -31,8 +31,7 @@ body {
     justify-content: flex-end;
 }
 
-table,
-h1 {
+table {
     box-shadow: 0 0 20px var(--main-color);
 }
 
@@ -41,6 +40,7 @@ input {
     background-color: transparent;
     color: var(--main-text-color);
     border-bottom: 1px solid var(--special-border-color);
+    align-self: flex-end;
 }
 
 input::placeholder {
@@ -56,7 +56,7 @@ table {
 h1 {
     font-size: 1.5rem;
     text-shadow: 5px 3px 1px var(--main-color);
-    margin: 0 auto;
+    margin: 0 auto 0 0;
 }
 
 th,
@@ -68,6 +68,7 @@ input {
 
 th, td {
     width: 25%;
+    height: 56px;
 }
 
 th {
@@ -111,6 +112,11 @@ tbody tr td:hover {
     display: flex;
 }
 
+.pagination ul li{
+    padding: 5px 10px;
+    margin: 5px;
+}
+
 .button {
     padding: 5px 10px;
     background-color: var(--special-bg-color);
@@ -118,6 +124,7 @@ tbody tr td:hover {
     margin: 5px;
     border: 0;
     color: var(--main-text-color);
+    align-self: flex-end;
 }
 
 .button:hover {

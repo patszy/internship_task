@@ -23,27 +23,49 @@ const getIncomesData = async (id) => {
     }
 };
 
-const drawTableBody = tab => {
+const drawTableBody = (tab, page = 1, counter = 10) => {
     tab.sort(compareIncomes);
 
     let tBody = document.querySelector('tbody');
     tBody.innerHTML = "";
     let tr, td;
 
-    tab.map((company) => {
+    counter = (page+1)*counter;
+    page = page*10;
+
+    while(page < counter) {
+        page++;
+
         tr = document.createElement('tr');
 
-        let keys = Object.keys(company);
+        let keys = Object.keys(tab[0]);
 
         keys.map((key) => {
             td = document.createElement('td');
 
-            td.innerText = `${company[key]}`;
+            td.innerText = `${tab[page][key]}`;
             tr.appendChild(td);
         });
 
         tBody.appendChild(tr);
-    });
+    }
+
+    // tab.map((company, index) => {
+    //     if(index < counter) {
+    //         tr = document.createElement('tr');
+
+    //         let keys = Object.keys(company);
+
+    //         keys.map((key) => {
+    //             td = document.createElement('td');
+
+    //             td.innerText = `${company[key]}`;
+    //             tr.appendChild(td);
+    //         });
+    //     }
+
+    //     tBody.appendChild(tr);
+    // });
 }
 
 const searchCompany = (tab, event) => {
@@ -99,6 +121,8 @@ window.onload = () => {
     const companiesTab = [];
     const incomesTab = [];
 
+    let page = 0;
+
     getCompaniesData()
         .then(compData => {
             compData.map(item => {
@@ -124,19 +148,33 @@ window.onload = () => {
             document.getElementsByClassName('loader')[0].style.display = 'none';
             document.getElementsByClassName('table__container')[0].style.display = 'flex';
 
-            drawTableBody(companiesTab);
+            drawTableBody(companiesTab, page);
         });
 
     document.querySelector('input').addEventListener('keyup', event => {
         document.querySelector('tbody').innerHTML = '';
 
-        drawTableBody( searchCompany(companiesTab, event) );
+        drawTableBody( searchCompany(companiesTab, event));
         console.log(companiesTab);
 
         console.log(incomesTab);
     });
 
     document.querySelector('button').addEventListener('click', () => {
-        drawTableBody(companiesTab);
+        drawTableBody(companiesTab, 0);
+    });
+
+    document.querySelectorAll('.pagination li')[0].addEventListener('click', () => {
+        if(page != 0) page--;
+
+        document.querySelectorAll('.pagination li')[1].innerText = page+1;
+        drawTableBody(companiesTab, page);
+    });
+
+    document.querySelectorAll('.pagination li')[2].addEventListener('click', () => {
+        if(page != Math.floor(companiesTab.length / 10) -1 ) page++;
+
+        document.querySelectorAll('.pagination li')[1].innerText = page+1;
+        drawTableBody(companiesTab, page);
     });
 };
