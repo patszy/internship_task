@@ -113,7 +113,7 @@ tbody tr td:hover {
 
 .button {
     padding: 5px 10px;
-    background-color: var(--main-color);
+    background-color: var(--special-bg-color);
     cursor: pointer;
     margin: 5px;
     border: 0;

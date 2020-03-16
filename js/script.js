@@ -24,6 +24,8 @@ const getIncomesData = async (id) => {
 };
 
 const drawTableBody = tab => {
+    tab.sort(compareIncomes);
+
     let tBody = document.querySelector('tbody');
     tBody.innerHTML = "";
     let tr, td;
@@ -126,14 +128,15 @@ window.onload = () => {
         });
 
     document.querySelector('input').addEventListener('keyup', event => {
-        companiesTab.sort(compareIncomes);
         document.querySelector('tbody').innerHTML = '';
+
         drawTableBody( searchCompany(companiesTab, event) );
         console.log(companiesTab);
+
         console.log(incomesTab);
     });
 
     document.querySelector('button').addEventListener('click', () => {
-        drawTableBody(companiesTab.sort(compareIncomes));
+        drawTableBody(companiesTab);
     });
 };
