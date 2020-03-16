@@ -23,12 +23,12 @@ body {
     text-align: center;
 }
 
-.table {
+.table__container {
     width: 60%;
     margin: 30px auto 0;
     display: none;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 table,
@@ -40,7 +40,6 @@ input {
     border: 0;
     background-color: transparent;
     color: var(--main-text-color);
-    align-self: flex-end;
     border-bottom: 1px solid var(--special-border-color);
 }
 
@@ -103,6 +102,27 @@ tbody tr td:hover {
     border-radius: 50%;
     left: 46px;
     top: -8px;
+}
+
+.pagination ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.button {
+    padding: 5px 10px;
+    background-color: var(--main-color);
+    cursor: pointer;
+    margin: 5px;
+    border: 0;
+    color: var(--main-text-color);
+}
+
+.button:hover {
+    background-color: var(--main-text-color);
+    color: var(--main-bg-color);
 }
 
 @keyframes spin {

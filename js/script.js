@@ -25,6 +25,7 @@ const getIncomesData = async (id) => {
 
 const drawTableBody = tab => {
     let tBody = document.querySelector('tbody');
+    tBody.innerHTML = "";
     let tr, td;
 
     tab.map((company) => {
@@ -60,6 +61,12 @@ const searchCompany = (tab, event) => {
     return filteredTab;
 }
 
+const compareIncomes = (a, b) => {
+    if (a.tIncomes < b.tIncomes) return 1;
+    if (b.tIncomes < a.tIncomes) return -1;
+    return 0;
+}
+
 class Incomes{
     constructor(id, incomes){
         this.id = id;
@@ -91,35 +98,42 @@ window.onload = () => {
     const incomesTab = [];
 
     getCompaniesData()
-    .then(compData => {
-        compData.map(item => {
-            let company = new Company(item.id, item.name, item.city, 0);
-            companiesTab.push(company);
-        });
-
-        companiesTab.map( company => {
-            getIncomesData(company.id).then(incomData => {
-                let incomes = new Incomes(incomData.id, incomData.incomes);
-                incomes.sumIncomes(incomes);
-                incomesTab.push(incomes);
-
-                company.tIncomes = (Math.round(incomes.sum * 100) / 100).toFixed(2);
+        .then(compData => {
+            compData.map(item => {
+                let company = new Company(item.id, item.name, item.city, 0);
+                companiesTab.push(company);
             });
+
+            companiesTab.map( company => {
+                getIncomesData(company.id).then(incomData => {
+                    let incomes = new Incomes(incomData.id, incomData.incomes);
+                    incomes.sumIncomes(incomes);
+                    incomesTab.push(incomes);
+
+                    company.tIncomes = (Math.round(incomes.sum * 100) / 100).toFixed(2);
+                });
+            });
+        })
+
+        .then( () => {
+            console.log(companiesTab);
+            console.log(incomesTab);
+
+            document.getElementsByClassName('loader')[0].style.display = 'none';
+            document.getElementsByClassName('table__container')[0].style.display = 'flex';
+
+            drawTableBody(companiesTab);
         });
-    })
 
-    .then( () => {
-        console.log(companiesTab);
-        console.log(incomesTab);
-
-        document.getElementsByClassName('loader')[0].style.display = 'none';
-        document.getElementsByClassName('table')[0].style.display = 'flex';
-
-        drawTableBody(companiesTab);
-    });
-
-    document.querySelector('input').addEventListener('keyup', (event) => {
+    document.querySelector('input').addEventListener('keyup', event => {
+        companiesTab.sort(compareIncomes);
         document.querySelector('tbody').innerHTML = '';
         drawTableBody( searchCompany(companiesTab, event) );
+        console.log(companiesTab);
+        console.log(incomesTab);
+    });
+
+    document.querySelector('button').addEventListener('click', () => {
+        drawTableBody(companiesTab.sort(compareIncomes));
     });
 };
