@@ -66,11 +66,6 @@ input {
     padding: 10px 20px;
 }
 
-th, td {
-    width: 25%;
-    height: 56px;
-}
-
 th {
     border-bottom: 1px solid var(--special-border-color);
     background-color: var(--special-bg-color);

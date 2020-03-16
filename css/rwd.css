@@ -10,8 +10,14 @@
         width: 100%;
     }
 
+    button.button {
+        width: 30%;
+        padding: 10px;
+        margin: 20px auto 0;
+    }
+
     input {
-        width: 50%;
+        width: 60%;
         margin: 20px auto 0;
         text-align: center;
     }

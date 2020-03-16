@@ -33,21 +33,21 @@ const drawTableBody = (tab, page = 1, counter = 10) => {
     counter = (page+1)*counter;
     page = page*10;
 
-    while(page < counter) {
-        page++;
+    for(page; page<counter; page++){
+        if(page < tab.length){
+            tr = document.createElement('tr');
 
-        tr = document.createElement('tr');
+            let keys = Object.keys(tab[0]);
 
-        let keys = Object.keys(tab[0]);
+            keys.map((key) => {
+                td = document.createElement('td');
 
-        keys.map((key) => {
-            td = document.createElement('td');
+                td.innerText = `${tab[page][key]}`;
+                tr.appendChild(td);
+            });
 
-            td.innerText = `${tab[page][key]}`;
-            tr.appendChild(td);
-        });
-
-        tBody.appendChild(tr);
+            tBody.appendChild(tr);
+        }
     }
 
     // tab.map((company, index) => {
