@@ -49,23 +49,6 @@ const drawTableBody = (tab, page = 1, counter = 10) => {
             tBody.appendChild(tr);
         }
     }
-
-    // tab.map((company, index) => {
-    //     if(index < counter) {
-    //         tr = document.createElement('tr');
-
-    //         let keys = Object.keys(company);
-
-    //         keys.map((key) => {
-    //             td = document.createElement('td');
-
-    //             td.innerText = `${company[key]}`;
-    //             tr.appendChild(td);
-    //         });
-    //     }
-
-    //     tBody.appendChild(tr);
-    // });
 }
 
 const searchCompany = (tab, event) => {
