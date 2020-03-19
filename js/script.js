@@ -131,6 +131,12 @@ window.onload = () => {
 
             currentTab = companiesTab;
             drawTableBody(currentTab, page);
+
+            let rows = document.querySelector('table tbody').rows;
+            console.log(document.querySelector('table tbody').rows);
+            for(var i=0; i<rows.length; i++){
+                console.log(rows[i]);
+            }
         });
 
     document.querySelector('input').addEventListener('keyup', event => {
@@ -143,6 +149,19 @@ window.onload = () => {
     document.querySelector('button').addEventListener('click', () => {
         drawTableBody(currentTab, 0);
     });
+
+    //Getting clicked row data.
+
+    document.querySelector('table tbody').addEventListener('click', event => {
+        let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
+        console.log(rowIndex);
+        console.log(currentTab[rowIndex].id);
+        incomesTab.map( incomes => {
+            if(incomes.id == currentTab[rowIndex].id) console.log(incomes);
+        })
+    });
+
+    /* End clicked row data*/
 
     document.querySelectorAll('.pagination li')[0].addEventListener('click', () => {
         if(page > 0) page--;
