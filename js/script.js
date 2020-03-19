@@ -137,7 +137,7 @@ window.onload = () => {
         document.querySelector('tbody').innerHTML = '';
 
         currentTab = searchCompany(companiesTab, event);
-        drawTableBody( currentTab );
+        drawTableBody( currentTab, 0);
     });
 
     document.querySelector('button').addEventListener('click', () => {
@@ -145,14 +145,14 @@ window.onload = () => {
     });
 
     document.querySelectorAll('.pagination li')[0].addEventListener('click', () => {
-        if(page != 0) page--;
+        if(page > 0) page--;
 
         document.querySelectorAll('.pagination li')[1].innerText = page+1;
         drawTableBody(currentTab, page);
     });
 
     document.querySelectorAll('.pagination li')[2].addEventListener('click', () => {
-        if(page != Math.floor(currentTab.length / 10) -1 ) page++;
+        if(page < Math.floor(currentTab.length / 10) -1) page++;
 
         document.querySelectorAll('.pagination li')[1].innerText = page+1;
         drawTableBody(currentTab, page);
