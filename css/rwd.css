@@ -41,6 +41,10 @@
         margin-bottom: 30px;
     }
 
+    tr:last-child {
+        margin-bottom: 0;
+    }
+
     td:first-child {
         width: 100%;
     }

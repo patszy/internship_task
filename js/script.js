@@ -23,7 +23,25 @@ const getIncomesData = async (id) => {
     }
 };
 
+function drawTableHead() {
+    let tHead = document.querySelector('thead');
+    tHead.innerHTML = "";
+    let tr = document.createElement('tr'), th;
+
+    for(let i=0; i<arguments.length; i++){
+        th = document.createElement('th');
+        th.innerText = arguments[i];
+
+        tr.appendChild(th);
+    }
+
+    tHead.appendChild(tr);
+};
+
 const drawTableBody = (tab, page = 1, counter = 10) => {
+    document.getElementsByClassName('pagination')[0].style.display = "block";
+    document.querySelectorAll('.pagination li')[2].innerText = page+1;
+
     tab.sort(compareIncomes);
 
     let tBody = document.querySelector('tbody');
@@ -39,17 +57,83 @@ const drawTableBody = (tab, page = 1, counter = 10) => {
 
             let keys = Object.keys(tab[0]);
 
-            keys.map((key) => {
-                td = document.createElement('td');
+            keys.map((key, index) => {
+                if(index < 4){
+                    td = document.createElement('td');
 
-                td.innerText = `${tab[page][key]}`;
-                tr.appendChild(td);
+                    td.innerText = `${tab[page][key]}`;
+                    tr.appendChild(td);
+                }
             });
 
             tBody.appendChild(tr);
         }
     }
+
+    drawTableHead("id", "name", "city", "total incomes");
 }
+
+const drawDetailedTableBody = tab => {
+    document.getElementsByClassName('pagination')[0].style.display = "none";
+
+    let tBody = document.querySelector('tbody'), tr, td;
+    tBody.innerHTML = "";
+    tr = document.createElement('tr');
+    let keys = Object.keys(tab[0]);
+
+    keys.map((key) => {
+        td = document.createElement('td');
+
+        td.innerText = `${tab[0][key]}`;
+        tr.appendChild(td);
+    });
+
+    td = document.createElement('td');
+    td.innerText = `${tab[1]}`;
+
+    tr.appendChild(td);
+    tBody.appendChild(tr);
+}
+
+const getDetailedCompanyData = (tab, rowIndex, incomesTab) => {
+    let resultTab = [];
+
+    for(let i=0; i<incomesTab.length; i++){
+        if(incomesTab[i].id == tab[rowIndex].id) {
+            let company = tab[rowIndex];
+            resultTab = [];
+            company.avg = (Math.floor(company.tIncomes / incomesTab[i].incomes.length * 100) / 100).toFixed(2);
+
+            resultTab.push(company);
+
+            let maxDate = incomesTab[i].incomes.reduce( (prev, current) => (prev.date > current.date) ? prev : current);
+
+            let date = new Date(maxDate.date);
+            let lastMonthTab = [];
+            let lastMonthSum = 0;
+
+            incomesTab[i].incomes.map( income => {
+                if(new Date(income.date).getFullYear() == date.getFullYear() && new Date(income.date).getMonth() == date.getMonth()){
+                    lastMonthTab.push(income);
+                }
+            });
+
+            lastMonthTab.map( income => {
+                lastMonthSum += parseFloat(income.value);
+            });
+
+            resultTab.push(lastMonthSum);
+
+            console.log(incomesTab[i].incomes);
+            console.log(maxDate);
+            console.log(lastMonthTab);
+
+            break;
+        };
+    };
+
+    return resultTab;
+};
 
 const searchCompany = (tab, event) => {
     let filteredTab = [];
@@ -130,50 +214,56 @@ window.onload = () => {
             document.getElementsByClassName('table__container')[0].style.display = 'flex';
 
             currentTab = companiesTab;
-            drawTableBody(currentTab, page);
 
-            let rows = document.querySelector('table tbody').rows;
-            console.log(document.querySelector('table tbody').rows);
-            for(var i=0; i<rows.length; i++){
-                console.log(rows[i]);
-            }
+            drawTableBody(currentTab, page);
         });
 
     document.querySelector('input').addEventListener('keyup', event => {
-        document.querySelector('tbody').innerHTML = '';
-
         currentTab = searchCompany(companiesTab, event);
-        drawTableBody( currentTab, 0);
+        page = 0;
+
+        drawTableBody( currentTab, page);
     });
 
     document.querySelector('button').addEventListener('click', () => {
-        drawTableBody(currentTab, 0);
+        page = 0;
+        currentTab = companiesTab;
+
+        document.querySelector('input').value = "";
+
+        drawTableBody(currentTab, page);
     });
 
-    //Getting clicked row data.
+    document.querySelector('.pagination').addEventListener('click', (event) => {
+        switch (event.target) {
+            case document.querySelectorAll('.pagination li i')[0]:
+                page = 0;
+            break;
+
+            case document.querySelectorAll('.pagination li i')[1]:
+                if(page > 0) page--;
+            break;
+
+            case document.querySelectorAll('.pagination li i')[2]:
+                if(page < Math.floor(currentTab.length / 10) -1) page++;
+            break;
+
+            case document.querySelectorAll('.pagination li i')[3]:
+                page = Math.floor(currentTab.length / 10) -1;
+            break;
+
+            default: ;
+        }
+
+        drawTableBody(currentTab, page);
+    });
 
     document.querySelector('table tbody').addEventListener('click', event => {
         let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
-        console.log(rowIndex);
-        console.log(currentTab[rowIndex].id);
-        incomesTab.map( incomes => {
-            if(incomes.id == currentTab[rowIndex].id) console.log(incomes);
-        })
-    });
 
-    /* End clicked row data*/
+        currentTab = getDetailedCompanyData(currentTab, rowIndex, incomesTab);
 
-    document.querySelectorAll('.pagination li')[0].addEventListener('click', () => {
-        if(page > 0) page--;
-
-        document.querySelectorAll('.pagination li')[1].innerText = page+1;
-        drawTableBody(currentTab, page);
-    });
-
-    document.querySelectorAll('.pagination li')[2].addEventListener('click', () => {
-        if(page < Math.floor(currentTab.length / 10) -1) page++;
-
-        document.querySelectorAll('.pagination li')[1].innerText = page+1;
-        drawTableBody(currentTab, page);
+        drawTableHead("id", "name", "city", "total incomes", "total incomes avg", "last month incomes");
+        drawDetailedTableBody(currentTab, 0);
     });
 };

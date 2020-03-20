@@ -69,6 +69,7 @@ input {
 th {
     border-bottom: 1px solid var(--special-border-color);
     background-color: var(--special-bg-color);
+    text-transform: capitalize;
 }
 
 tbody tr:hover,
@@ -107,7 +108,7 @@ tbody tr td:hover {
     display: flex;
 }
 
-.pagination ul li{
+.pagination ul li:nth-child(3) {
     padding: 5px 10px;
     margin: 5px;
 }
