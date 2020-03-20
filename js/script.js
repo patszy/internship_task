@@ -95,46 +95,37 @@ const drawDetailedTableBody = tab => {
     tBody.appendChild(tr);
 }
 
-const getDetailedCompanyData = (tab, rowIndex, incomesTab, startDate = "", endDate = "") => {
+const getDetailedCompanyData = (tab, rowIndex, incomesTab) => {
     let resultTab = [];
 
-    if(startDate == "" || endDate == "") {
-        for(let i=0; i<incomesTab.length; i++){
-            if(tab[i].id == tab[rowIndex].id) {
-                let company = tab[rowIndex];
-                company.avg = (Math.floor(company.tIncomes / incomesTab[i].incomes.length * 100) / 100).toFixed(2);
+    for(let i=0; i<incomesTab.length; i++){
+        if(tab[i].id == tab[rowIndex].id) {
+            let company = tab[rowIndex];
+            company.avg = (Math.floor(company.tIncomes / incomesTab[i].incomes.length * 100) / 100).toFixed(2);
 
-                resultTab.push(company);
+            resultTab.push(company);
 
-                let maxDate = incomesTab[i].incomes.reduce( (prev, current) => (prev.date > current.date) ? prev : current);
+            let maxDate = incomesTab[i].incomes.reduce( (prev, current) => (prev.date > current.date) ? prev : current);
 
-                let date = new Date(maxDate.date);
-                let lastMonthTab = [];
-                let lastMonthSum = 0;
+            let date = new Date(maxDate.date);
+            let lastMonthTab = [];
+            let lastMonthSum = 0;
 
-                incomesTab[i].incomes.map( income => {
-                    if(new Date(income.date).getFullYear() == date.getFullYear() && new Date(income.date).getMonth() == date.getMonth()){
-                        lastMonthTab.push(income);
-                    }
-                });
+            incomesTab[i].incomes.map( income => {
+                if(new Date(income.date).getFullYear() == date.getFullYear() && new Date(income.date).getMonth() == date.getMonth()){
+                    lastMonthTab.push(income);
+                }
+            });
 
-                lastMonthTab.map( income => {
-                    lastMonthSum += parseFloat(income.value);
-                });
+            lastMonthTab.map( income => {
+                lastMonthSum += parseFloat(income.value);
+            });
 
-                resultTab.push(lastMonthSum);
+            resultTab.push(lastMonthSum);
 
-                console.log(incomesTab[i].incomes);
-                console.log(maxDate);
-                console.log(lastMonthTab);
-
-                break;
-            };
+            break;
         };
-    } else {
-        console.log(startDate);
-        console.log(endDate);
-    }
+    };
 
     return resultTab;
 };
@@ -293,12 +284,6 @@ window.onload = () => {
     document.querySelector('.date-selection button').addEventListener('click', () => {
         let startDate = document.getElementsByTagName('input')[0].value;
         let endDate = document.getElementsByTagName('input')[1].value;
-
-        let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
-
-        console.log(currentTab);
-
-        currentTab = getDetailedCompanyData(currentTab, rowIndex, incomesTab, startDate, endDate);
 
         drawDetailedTableBody(currentTab, 0);
     });
