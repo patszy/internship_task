@@ -95,42 +95,46 @@ const drawDetailedTableBody = tab => {
     tBody.appendChild(tr);
 }
 
-const getDetailedCompanyData = (tab, rowIndex, incomesTab) => {
+const getDetailedCompanyData = (tab, rowIndex, incomesTab, startDate = "", endDate = "") => {
     let resultTab = [];
 
-    for(let i=0; i<incomesTab.length; i++){
-        if(incomesTab[i].id == tab[rowIndex].id) {
-            let company = tab[rowIndex];
-            resultTab = [];
-            company.avg = (Math.floor(company.tIncomes / incomesTab[i].incomes.length * 100) / 100).toFixed(2);
+    if(startDate == "" || endDate == "") {
+        for(let i=0; i<incomesTab.length; i++){
+            if(tab[i].id == tab[rowIndex].id) {
+                let company = tab[rowIndex];
+                company.avg = (Math.floor(company.tIncomes / incomesTab[i].incomes.length * 100) / 100).toFixed(2);
 
-            resultTab.push(company);
+                resultTab.push(company);
 
-            let maxDate = incomesTab[i].incomes.reduce( (prev, current) => (prev.date > current.date) ? prev : current);
+                let maxDate = incomesTab[i].incomes.reduce( (prev, current) => (prev.date > current.date) ? prev : current);
 
-            let date = new Date(maxDate.date);
-            let lastMonthTab = [];
-            let lastMonthSum = 0;
+                let date = new Date(maxDate.date);
+                let lastMonthTab = [];
+                let lastMonthSum = 0;
 
-            incomesTab[i].incomes.map( income => {
-                if(new Date(income.date).getFullYear() == date.getFullYear() && new Date(income.date).getMonth() == date.getMonth()){
-                    lastMonthTab.push(income);
-                }
-            });
+                incomesTab[i].incomes.map( income => {
+                    if(new Date(income.date).getFullYear() == date.getFullYear() && new Date(income.date).getMonth() == date.getMonth()){
+                        lastMonthTab.push(income);
+                    }
+                });
 
-            lastMonthTab.map( income => {
-                lastMonthSum += parseFloat(income.value);
-            });
+                lastMonthTab.map( income => {
+                    lastMonthSum += parseFloat(income.value);
+                });
 
-            resultTab.push(lastMonthSum);
+                resultTab.push(lastMonthSum);
 
-            console.log(incomesTab[i].incomes);
-            console.log(maxDate);
-            console.log(lastMonthTab);
+                console.log(incomesTab[i].incomes);
+                console.log(maxDate);
+                console.log(lastMonthTab);
 
-            break;
+                break;
+            };
         };
-    };
+    } else {
+        console.log(startDate);
+        console.log(endDate);
+    }
 
     return resultTab;
 };
@@ -156,6 +160,20 @@ const compareIncomes = (a, b) => {
     if (a.tIncomes < b.tIncomes) return 1;
     if (b.tIncomes < a.tIncomes) return -1;
     return 0;
+}
+
+const setMaxDataAttr = () => {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if(dd<10) dd = '0' + dd;
+    if(mm<10) mm = '0' + mm;
+
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementsByTagName("input")[0].setAttribute("max", today);
+    document.getElementsByTagName("input")[1].setAttribute("max", today);
 }
 
 class Incomes{
@@ -191,6 +209,8 @@ window.onload = () => {
 
     let page = 0;
 
+    setMaxDataAttr();
+
     getCompaniesData()
         .then(compData => {
             compData.map(item => {
@@ -218,18 +238,19 @@ window.onload = () => {
             drawTableBody(currentTab, page);
         });
 
-    document.querySelector('input').addEventListener('keyup', event => {
+    document.getElementsByTagName('input')[2].addEventListener('keyup', event => {
         currentTab = searchCompany(companiesTab, event);
         page = 0;
 
         drawTableBody( currentTab, page);
     });
 
-    document.querySelector('button').addEventListener('click', () => {
+    document.querySelectorAll('button')[1].addEventListener('click', () => {
         page = 0;
         currentTab = companiesTab;
 
-        document.querySelector('input').value = "";
+        document.getElementsByTagName('input')[2].value = "";
+        document.querySelector('.date-selection').style.display = "none";
 
         drawTableBody(currentTab, page);
     });
@@ -259,11 +280,26 @@ window.onload = () => {
     });
 
     document.querySelector('table tbody').addEventListener('click', event => {
+        document.querySelector('.date-selection').style.display = "flex";
+
         let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
 
         currentTab = getDetailedCompanyData(currentTab, rowIndex, incomesTab);
 
         drawTableHead("id", "name", "city", "total incomes", "total incomes avg", "last month incomes");
+        drawDetailedTableBody(currentTab, 0);
+    });
+
+    document.querySelector('.date-selection button').addEventListener('click', () => {
+        let startDate = document.getElementsByTagName('input')[0].value;
+        let endDate = document.getElementsByTagName('input')[1].value;
+
+        let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
+
+        console.log(currentTab);
+
+        currentTab = getDetailedCompanyData(currentTab, rowIndex, incomesTab, startDate, endDate);
+
         drawDetailedTableBody(currentTab, 0);
     });
 };

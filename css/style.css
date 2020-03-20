@@ -25,7 +25,7 @@ body {
 
 .table__container {
     width: 60%;
-    margin: 30px auto 0;
+    margin: 0 auto 0;
     display: none;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -47,6 +47,18 @@ input::placeholder {
     color: var(--main-text-color);
 }
 
+.date-selection {
+    display: none;
+    flex-wrap: wrap;
+}
+
+.user-pannel {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
 table {
     width: 100%;
     border-spacing: 0;
@@ -56,7 +68,7 @@ table {
 h1 {
     font-size: 1.5rem;
     text-shadow: 5px 3px 1px var(--main-color);
-    margin: 0 auto 0 0;
+    margin: 20px auto;
 }
 
 th,
@@ -120,7 +132,6 @@ tbody tr td:hover {
     margin: 5px;
     border: 0;
     color: var(--main-text-color);
-    align-self: flex-end;
 }
 
 .button:hover {

@@ -15,8 +15,22 @@
     <section class="table__container">
         <h1>Companies table</h1>
 
-        <button class="button"> Refresh </button>
-        <input type="text" placeholder="Search ...">
+        <div class="user-pannel">
+            <div class="date-selection">
+                <label>Start date:
+                    <input type="date" id="start-date" name="start-date">
+                </label>
+
+                <label>End date:
+                    <input type="date" id="end-date" name="end-date">
+                </label>
+
+                <button class="button"> Load </button>
+            </div>
+
+            <input type="text" placeholder="Search ...">
+            <button class="button"> Refresh </button>
+        </div>
 
         <table>
             <thead>
