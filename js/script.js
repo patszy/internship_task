@@ -130,6 +130,44 @@ const getDetailedCompanyData = (tab, rowIndex, incomesTab) => {
     return resultTab;
 };
 
+const getLimitedData = (tab, startDate, endDate) => {
+    let resultTab = tab;
+
+    if(startDate != "" && endDate != ""){
+        if(startDate < endDate){
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+
+            for(let i=0; i<incomesTab.length; i++){
+                if(tab[0].id == incomesTab[i].id){
+                    let limitedIncomesTab = [];
+                    let limitedIncomesAvg = 0;
+
+                    incomesTab[i].incomes.map( income => {
+                        if(new Date(income.date) >= startDate && new Date(income.date) <= endDate){
+                            limitedIncomesTab.push(income);
+                        }
+                    });
+
+                    limitedIncomesTab.map( income => {
+                        limitedIncomesAvg += parseFloat(income.value);
+                    });
+
+                    if(limitedIncomesTab.length == 0) {
+                        alert("No incomes in that time compartment.");
+                        resultTab[0].avg = 0;
+                    }
+                    else resultTab[0].avg = (Math.floor(limitedIncomesAvg / limitedIncomesTab.length *100) / 100).toFixed(2);
+
+                    break;
+                }
+            };
+        } else alert("Start date is after end date.");
+    }
+
+    return resultTab;
+};
+
 const searchCompany = (tab, event) => {
     let filteredTab = [];
     let inputValue = event.target.value;
@@ -178,7 +216,7 @@ class Incomes{
         let values = Object.values(incomes);
         this.sum = 0;
 
-        for(let i=0; i<(values.length-1); i++){
+        for(let i=0; i<values.length; i++){
             this.sum += parseFloat(values[i].value);
         }
     }
@@ -284,6 +322,8 @@ window.onload = () => {
     document.querySelector('.date-selection button').addEventListener('click', () => {
         let startDate = document.getElementsByTagName('input')[0].value;
         let endDate = document.getElementsByTagName('input')[1].value;
+
+        getLimitedData(currentTab, startDate, endDate);
 
         drawDetailedTableBody(currentTab, 0);
     });
