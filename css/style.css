@@ -28,7 +28,7 @@ body {
     margin: 0 auto 0;
     display: none;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 table {

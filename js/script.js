@@ -46,13 +46,13 @@ const drawTableBody = (tab, page = 1, counter = 10) => {
 
     let tBody = document.querySelector('tbody');
     tBody.innerHTML = "";
-    let tr, td;
+    let tr, td, localPage, localCounter;
 
-    counter = (page+1)*counter;
-    page = page*10;
+    localCounter = (page+1)*counter;
+    localPage = page*counter;
 
-    for(page; page<counter; page++){
-        if(page < tab.length){
+    for(localPage; localPage<localCounter; localPage++){
+        if(localPage < tab.length){
             tr = document.createElement('tr');
 
             let keys = Object.keys(tab[0]);
@@ -61,7 +61,7 @@ const drawTableBody = (tab, page = 1, counter = 10) => {
                 if(index < 4){
                     td = document.createElement('td');
 
-                    td.innerText = `${tab[page][key]}`;
+                    td.innerText = `${tab[localPage][key]}`;
                     tr.appendChild(td);
                 }
             });
@@ -232,11 +232,18 @@ class Company{
 }
 
 window.onload = () => {
-    const companiesTab = [];
-    const incomesTab = [];
-    let currentTab = [];
+    let media = window.matchMedia('(max-width: 760px)'), currentTab = [], page = 0, counter = 10;
+    const companiesTab = [], incomesTab = [];
 
-    let page = 0;
+    (media.matches) ? counter = 1 : counter = 10;
+    document.getElementById('counter').value = counter;
+
+    media.addEventListener("change", e => {
+        (e.matches) ? counter = 1 : counter = 10;
+        document.getElementById('counter').value = counter;
+
+        drawTableBody(currentTab, page, counter);
+    });
 
     setMaxDataAttr();
 
@@ -264,14 +271,14 @@ window.onload = () => {
 
             currentTab = companiesTab;
 
-            drawTableBody(currentTab, page);
+            drawTableBody(currentTab, page, counter);
         });
 
     document.getElementsByTagName('input')[2].addEventListener('keyup', event => {
         currentTab = searchCompany(companiesTab, event);
         page = 0;
 
-        drawTableBody( currentTab, page);
+        drawTableBody(currentTab, page, counter);
     });
 
     document.querySelectorAll('button')[1].addEventListener('click', () => {
@@ -281,7 +288,7 @@ window.onload = () => {
         document.getElementsByTagName('input')[2].value = "";
         document.querySelector('.date-selection').style.display = "none";
 
-        drawTableBody(currentTab, page);
+        drawTableBody(currentTab, page, counter);
     });
 
     document.querySelector('.pagination').addEventListener('click', (event) => {
@@ -295,17 +302,17 @@ window.onload = () => {
             break;
 
             case document.querySelectorAll('.pagination li i')[2]:
-                if(page < Math.floor(currentTab.length / 10) -1) page++;
+                if(page < Math.ceil(currentTab.length / counter) -1) page++;
             break;
 
             case document.querySelectorAll('.pagination li i')[3]:
-                page = Math.floor(currentTab.length / 10) -1;
+                page = Math.ceil(currentTab.length / counter) -1;
             break;
 
             default: ;
         }
 
-        drawTableBody(currentTab, page);
+        drawTableBody(currentTab, page, counter);
     });
 
     document.querySelector('table tbody').addEventListener('click', event => {
@@ -327,4 +334,10 @@ window.onload = () => {
 
         drawDetailedTableBody(currentTab, 0);
     });
+
+    document.getElementById('counter').addEventListener('change', e => {
+        counter = e.target.value;
+        drawTableBody(currentTab, 0, counter);
+    });
+
 };
