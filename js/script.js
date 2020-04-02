@@ -40,7 +40,7 @@ function drawTableHead() {
 
 const drawTableBody = (tab, page = 1, counter = 10) => {
     document.getElementsByClassName('pagination')[0].style.display = "block";
-    document.querySelectorAll('.pagination li')[2].innerText = page+1;
+    document.querySelectorAll('.pagination li')[2].innerText = `${page+1} / ${Math.ceil(tab.length/counter)}`;
 
     tab.sort(compareIncomes);
 
@@ -287,6 +287,7 @@ window.onload = () => {
 
         document.getElementsByTagName('input')[2].value = "";
         document.querySelector('.date-selection').style.display = "none";
+        document.getElementById('counter').parentElement.style.display = "block";
 
         drawTableBody(currentTab, page, counter);
     });
@@ -317,6 +318,7 @@ window.onload = () => {
 
     document.querySelector('table tbody').addEventListener('click', event => {
         document.querySelector('.date-selection').style.display = "flex";
+        document.getElementById('counter').parentElement.style.display = "none";
 
         let rowIndex = event.target.parentElement.rowIndex+((page)*10)-1;
 
