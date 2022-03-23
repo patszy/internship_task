@@ -3,7 +3,6 @@
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
-* [Sources](#sources)
 
 ## General info
 This project is table of companies and their incomes.
@@ -16,6 +15,8 @@ Copmanies can be filtered by name. <br/>
 Table is paginated. <br/>
 Table have detailed compay view (default data and averages of incomes). <br/>
 Table is responsive.
+
+https://patszy.github.io/internship_task/
 
 ## Technologies
 Project is created with:
