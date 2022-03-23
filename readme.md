@@ -34,11 +34,3 @@ Clicked double arrows changes page to first or last. <br/>
 Clicked row redirect to detailed company view. <br/>
 Refresh button changes page to 1, shows page of all companies or returns from detailed company view. <br/>
 You can choose rows number display by selecting rows.
-
-## Sources
-Companies data url:
-https://recruitment.hal.skygate.io/companies/
-
-Companies incomes data url:
-https://recruitment.hal.skygate.io/incomes/:id <br/>
-eg. https://recruitment.hal.skygate.io/incomes/82
