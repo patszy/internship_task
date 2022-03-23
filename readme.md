@@ -7,6 +7,8 @@
 ## General info
 This project is table of companies and their incomes.
 
+It doesnt work because company deleted links. Look just on code.
+
 Table is in pre-alpha version.
 
 The table shows id, name, city and incomes of company. <br/>
